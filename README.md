@@ -23,6 +23,42 @@ are manually created.
 More [here](wrangler-docs/upcoming-features.md) on upcoming features.
 
   * **User Defined Directives, also known as UDD**, allow you to create custom functions to transform records within CDAP DataPrep or a.k.a Wrangler. CDAP comes with a comprehensive library of functions. There are however some omissions, and some specific cases for which UDDs are the solution. Additional information on how you can build your custom directives [here](wrangler-docs/custom-directive.md).
+
+## Parser Tokens
+
+Wrangler includes specialized token parsers that help with common data transformation tasks:
+
+### BYTE_SIZE Parser
+
+The `BYTE_SIZE` parser handles string representations of data sizes with various units.
+
+- **Supported Units:** B (Bytes), KB (Kilobytes), MB (Megabytes), GB (Gigabytes), TB (Terabytes), PB (Petabytes)
+- **Usage:** Values must include both a number and unit (e.g., "10B", "1.5KB", "2MB", "3.5GB")
+- **Functionality:** Parses the input string and converts it to canonical bytes
+- **Example:**
+  ```java
+  ByteSize size = new ByteSize("1.5GB");
+  long bytes = size.getBytes(); // Returns 1610612736 (1.5 * 1024^3)
+  ```
+- **Error Handling:** Throws exceptions for invalid formats (missing numbers, invalid units)
+
+### TIME_DURATION Parser
+
+The `TIME_DURATION` parser handles string representations of time durations with various units.
+
+- **Supported Units:** ms (milliseconds), s (seconds), m (minutes), h (hours), d (days)
+- **Usage:** Values must include both a number and unit (e.g., "10ms", "1.5s", "2m", "3.5h", "1d")
+- **Functionality:** Parses the input string and converts it to canonical nanoseconds
+- **Example:**
+  ```java
+  TimeDuration duration = new TimeDuration("1.5s");
+  long nanoseconds = duration.getNanoseconds(); // Returns 1,500,000,000 (1.5 billion)
+  ```
+- **Error Handling:** Throws exceptions for invalid formats (missing numbers, invalid units)
+
+These parsers provide standardized ways to handle common units of measurement within your data transformation pipelines, ensuring consistent interpretation of size and time values.
+
+  * **User Defined Directives, also known as UDD** (continued)
     * Migrating directives from version 1.0 to version 2.0 [here](wrangler-docs/directive-migration.md)
     * Information about Grammar [here](wrangler-docs/grammar/grammar-info.md)
     * Various `TokenType` supported by system [here](../api/src/main/java/io/cdap/wrangler/api/parser/TokenType.java)
