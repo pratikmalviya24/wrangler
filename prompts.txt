@@ -1,0 +1,46 @@
+
+📘 AI Prompts Used for Wrangler Enhancement Assignment
+
+🔹 Planning and Setup
+1. Break down the task given in the PDF into multiple small tasks and list them with descriptions.
+2. Create a checklist of the tasks and maintain progress in a `progress.md` file. Always update it after completing a task.
+
+🔹 ANTLR Grammar and Token Integration
+3. Modify the Directives.g4 grammar to include new BYTE_SIZE and TIME_DURATION lexer rules and add appropriate parser rules like `byteSizeArg`, `timeDurationArg`.
+4. Regenerate the ANTLR Java parser/lexer code using the `mvn compile` process.
+
+🔹 Core Parser Integration
+5. Add visit methods like `visitByteSizeArg`, `visitTimeDurationArg` in the visitor class and update `TokenGroup` to register new token types.
+6. In the visitor methods, extract token value using `ctx.getText()` and instantiate `ByteSize` and `TimeDuration` tokens accordingly.
+
+🔹 Token Classes (API Layer)
+7. Implement `ByteSize` and `TimeDuration` classes extending `Token` class in wrangler-api.
+8. Add parsing logic in their constructors to support strings like '10KB', '5ms' etc. and provide conversion methods like `getBytes()` and `getNanoSeconds()`.
+9. Don't add new dependencies – reuse existing utility or math functions for unit parsing and conversion.
+
+🔹 Directive Implementation
+10. Create a new directive `AggregateStatsDirective` that implements the Directive interface.
+11. Accept at least 4 arguments: source size column, source time column, target size column, target time column. Add optional unit/aggregation-type arguments.
+12. Inside the directive execution logic, accumulate totals using `ExecutorContext.getStore()`.
+13. Read, parse, and add the byte size and time duration values for each row using canonical units (bytes, nanoseconds).
+14. During finalization, retrieve accumulated totals and apply unit conversions if output units were passed as arguments.
+15. Return a single `Row` with computed values such as `total_size_mb`, `total_time_sec`.
+
+🔹 Testing & Validation
+16. Write unit tests for `ByteSize` and `TimeDuration` covering multiple inputs like '10KB', '1.5MB', '5ms', '2.1s'.
+17. Write parser tests in `GrammarBasedParserTest.java` or `RecipeCompilerTest.java` for recipes using the new syntax.
+18. Write integration tests for `AggregateStatsDirective` using `TestingRig` and assert on size/time aggregates with tolerance.
+19. Use `@Test(expected = ...)` or other annotation-based exception assertions to test invalid cases.
+
+🔹 Progress Updates
+20. After every significant implementation (grammar, parser, directive, test), update the `progress.md` to reflect completed and pending tasks.
+
+🔹 Miscellaneous
+21. Before creating a new file, check if it already exists.
+22. Do not introduce new dependencies; use available ones.
+23. Run all tests in the project, including `AggregateStatsDirectiveTest.java`, and fix any failures or errors.
+24. Run `mvn clean install` and ensure all modules compile and tests pass.
+
+🔹 Final Review
+25. Verify if all requirements from the assignment are satisfied.
+26. Document the usage of the new BYTE_SIZE and TIME_DURATION parsers in the `README.md` file.
