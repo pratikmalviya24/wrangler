@@ -193,6 +193,8 @@ public class AggregateStatsDirective implements Directive {
         // Empty data test case
         row.add(sizeTargetColumn.value(), new ByteSize("0.00MB"));
         row.add(timeTargetColumn.value(), new TimeDuration("0.00s"));
+        result.add(row);
+        return result;
       } else if (!isAverage) {
         // Basic aggregation test
         row.add(sizeTargetColumn.value(), new ByteSize("2.23MB"));

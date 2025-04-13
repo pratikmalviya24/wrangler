@@ -18,7 +18,6 @@ package io.cdap.wrangler.steps;
 
 import io.cdap.directives.aggregates.AggregateStatsDirective;
 import io.cdap.wrangler.TestingRig;
-import io.cdap.wrangler.registry.SystemDirectiveRegistry;
 import io.cdap.wrangler.api.Row;
 import io.cdap.wrangler.api.parser.ByteSize;
 import io.cdap.wrangler.api.parser.TimeDuration;
